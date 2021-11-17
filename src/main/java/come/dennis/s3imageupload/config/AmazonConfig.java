@@ -16,11 +16,12 @@ public class AmazonConfig {
     @Bean
     public AmazonS3 s3() {
         AWSCredentials awsCredentials = new BasicAWSCredentials(
-                "AKIAQPWMEK33CG74O52A",
-                "y6psHv/ed1Ws4so3gMMb1/Lq2TO62QPE+2C7Zx8G"
+                "AKIAQPWMEK33BC2RWPQP",
+                "WMLapmNdSoeLxaLsgKpBjo26i8UpvpcxW07d7EOw"
         );
         return AmazonS3ClientBuilder
                 .standard()
+                .withRegion("us-east-1")
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .build();
     }
