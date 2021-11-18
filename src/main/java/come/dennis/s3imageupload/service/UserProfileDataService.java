@@ -6,6 +6,7 @@ import come.dennis.s3imageupload.repository.FileStore;
 import come.dennis.s3imageupload.repository.UserProfileDataRepository;
 import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,11 +37,8 @@ public class UserProfileDataService {
         }
 
         //3 check if the user exist in our database(inmemory for now)
-        UserProfile user = fakeUserProfileDataStore.getUserProfile()
-                .stream()
-                .filter(item->item.getUserProfileId().equals(id))
-                .findFirst()
-                .orElseThrow(()->new IllegalStateException(String.format("User Profile %s not found", id)));
+        UserProfile user = getUserProfileOrThrow(id); //this custom method is on line 59 below
+
 
         //4 grab some metadata in file if any
         Map<String, String> metadata = new HashMap<>();
@@ -53,8 +51,28 @@ public class UserProfileDataService {
         String filename = String.format("%s-%s", file.getOriginalFilename(), UUID.randomUUID());
         try {
             fileStore.save(path, filename,Optional.of(metadata),file.getInputStream());
+            user.setUserProfileImageLink(filename); //note if you restart the server you'll loose the link and'll have to upload the image again to temporay hold it. it is because we are using an inmemory database
         }catch (IOException e){
             throw new IllegalStateException(e);
         }
+    }
+    private UserProfile getUserProfileOrThrow(UUID passedId) {
+        return fakeUserProfileDataStore
+                .getUserProfile()
+                .stream()
+                .filter(item->item.getUserProfileId().equals(passedId))
+                .findFirst()
+                .orElseThrow(()->new IllegalStateException(String.format("User Profile %s not found", passedId)));
+    }
+
+    public byte[] downloadUserProfileImage(UUID id) {
+        UserProfile user = getUserProfileOrThrow(id);
+        String path = String.format("%s/%s",
+                BucketName.PROFILE_IMAGE_BUCKET.getBucketName(),
+                user.getUserProfileId());
+
+        return user.getUserProfileImageLink()
+                .map(link->fileStore.download(path, link))
+                .orElse(new byte[0]);
     }
 }

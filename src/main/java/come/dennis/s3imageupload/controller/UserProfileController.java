@@ -36,4 +36,8 @@ public class UserProfileController {
                                        @RequestParam("file") MultipartFile file) throws IOException {
         userProfileDataAccessService.uploadProfileImage(userProfileId,file);
     }
+    @GetMapping(path = "{userProfileId}/download")
+    public byte[] downloadUserProfileImage(@PathVariable("userProfileId") UUID id){
+            return userProfileDataAccessService.downloadUserProfileImage(id);
+    }
 }

@@ -1,41 +1,34 @@
 package come.dennis.s3imageupload.model;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 public class UserProfile {
-    private UUID userProfileId;
-    private String username;
-    private String userProfileImageLink; //s3 key
+    private final UUID userProfileId; //when you are using final you cannot set the property of that field you can only asign once and then keep getting
+    private final String username;
+    private Optional<String> userProfileImageLink; //s3 key
 
     public UserProfile(UUID userProfileId, String username, String userProfileImageLink) {
         this.userProfileId = userProfileId;
         this.username = username;
-        this.userProfileImageLink = userProfileImageLink;
+        this.userProfileImageLink = Optional.ofNullable(userProfileImageLink);
     }
 
     public UUID getUserProfileId() {
         return userProfileId;
     }
 
-    public void setUserProfileId(UUID userProfileId) {
-        this.userProfileId = userProfileId;
-    }
-
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getUserProfileImageLink() {
+    public Optional<String> getUserProfileImageLink() {
         return userProfileImageLink;
     }
 
     public void setUserProfileImageLink(String userProfileImageLink) {
-        this.userProfileImageLink = userProfileImageLink;
+        this.userProfileImageLink = Optional.ofNullable(userProfileImageLink);
     }
 
     @Override

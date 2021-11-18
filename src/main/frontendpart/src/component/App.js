@@ -22,6 +22,10 @@ const UserProfile = () => {
   return userprofiles.map((item, index) => {
     return (
       <div key={index} className="userprofile">
+        {item.userProfileId ? (
+        <img  alt = "profile pix"
+          src={`http://localhost:8080/userprofile.com/${item.userProfileId}/download`}
+        />): null}
         <br />
         <br />
         <h1>{item.username}</h1>
