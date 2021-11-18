@@ -12,6 +12,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("userprofile.com")
+@CrossOrigin("*") //here we are saying it can be access from anywhere not appropriate in production but because we are in development and want our react app to be able to remove the CORS error
 public class UserProfileController {
 
     private final UserProfileDataService userProfileDataAccessService;
@@ -32,6 +33,6 @@ public class UserProfileController {
     )
     public void uploadUserProfileImage(@PathVariable("userProfileId") UUID userProfileId,
                                        @RequestParam("file") MultipartFile file){
-        userProfileDataAccessService.upoadProfileImage(userProfileId,file);
+        userProfileDataAccessService.uploadProfileImage(userProfileId,file);
     }
 }

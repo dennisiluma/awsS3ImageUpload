@@ -20,7 +20,7 @@ public class UserProfileDataService {
     public List<UserProfile> getUserProfile(){
         return fakeUserProfileDataStore.getUserProfile();
     }
-    public void upoadProfileImage(UUID id, MultipartFile file){
+    public void uploadProfileImage(UUID id, MultipartFile file){
         //check if file is not empty
 
         //check if file is an image
