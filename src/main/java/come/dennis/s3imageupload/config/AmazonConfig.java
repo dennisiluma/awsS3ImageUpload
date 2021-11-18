@@ -4,9 +4,8 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Builder;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import come.dennis.s3imageupload.AwsKey;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,13 +18,14 @@ public class AmazonConfig {
 
     String key;
     String id;
+
         public void awsKey(){
             try {
                 File myObj = new File("awsaccesskey.txt");
                 Scanner myReader = new Scanner(myObj);
                 while (myReader.hasNextLine()) {
                     String data = myReader.nextLine();
-                    this.id = data;
+                    id = data;
                 }
                 myReader.close();
             } catch (FileNotFoundException e) {
@@ -37,20 +37,17 @@ public class AmazonConfig {
                 Scanner myReader = new Scanner(myObj2);
                 while (myReader.hasNextLine()) {
                     String data2 = myReader.nextLine();
-                    this.key = data2;
+                    key = data2;
                 }
                 myReader.close();
-            } catch (FileNotFoundException e) {
-                System.out.println("An error occurred.");
-                e.printStackTrace();
-            }
+            } catch (FileNotFoundException e) {}
         }
 
     @Bean
     public AmazonS3 s3() {
         AWSCredentials awsCredentials = new BasicAWSCredentials(
-                id,
-                key
+                AwsKey.getAccessKey(),
+                AwsKey.getSecretKey()
         );
         return AmazonS3ClientBuilder
                 .standard()

@@ -37,3 +37,4 @@ build/
 awsaccesskey.txt
 awskeys.txt
 awssecretkey.txt
+/src/main/java/come/dennis/s3imageupload/AwsKey.java
